@@ -1,0 +1,26 @@
+security:
+    encoders:
+        App\Entity\User:
+            id: 'App\Security\Encoder\ShaPasswordEncoder'
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: uid
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            guard:
+                provider: app_user_provider
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+
+    access_control:
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

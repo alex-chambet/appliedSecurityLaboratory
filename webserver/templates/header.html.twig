@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ path("home") }}">
+        iMovie
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link {{ activeLink == "home" ? "active" }}" href="{{ path('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('revoked_list') }}">Download the revocation list</a>
+            </li>
+            {% if app.user %}
+		{% if is_granted("ROLE_USER") %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ activeLink == "user" ? "active" }}" href="{{ path('user_home') }}">My account</a>
+                    </li>
+                {% elseif is_granted("ROLE_ADMIN") %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ activeLink == "admin" ? "active" }}" href="{{ path('admin_home') }}">Administration</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {{ activeLink == "login" ? "active" }}" href="{{ path('app_login') }}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+</nav>

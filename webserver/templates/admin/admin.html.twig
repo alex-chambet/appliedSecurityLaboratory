@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% set activeLink = "admin" %}
+
+{% block body %}
+    <div class="container">
+        <br />
+        {% for message in app.flashes('admin_success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <h1>iMovie's administrator interface</h1>
+        <p>
+            <strong>Number of certificates issued : </strong>{{ issuedCert }}
+            <br />
+            <strong>Number of revoked issued : </strong>{{ revokedCert }}
+            <br />
+            <strong>Serial number : </strong>{{ sn }}
+        </p>
+    </div>
+{% endblock %}
+
