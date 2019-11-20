@@ -7,3 +7,6 @@ For conveniance the VM passwords are the VM name (e.g. the `ca_core` VM has pass
 ## Client VM
 The Client VM has access to a password manager that contains all the useful passwords (or private keys) for the different user, etc. To access them you can run:
 `$sudo keppassxc` in a terminal and use the `/home/client/Desktop/passwords/passwords.kdbx` database with `asl` as master key.
+
+### Warning
+In order to avoid certificate problem, make sure that all VM have the same time.
