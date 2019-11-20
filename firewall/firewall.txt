@@ -1,0 +1,39 @@
+iptables -I INPUT 1 -m limit --limit 120/m -j LOG
+iptables -I FORWARD 1 -m limit --limit 120/m -j LOG
+iptables -I OUTPUT 1 -m limit --limit 120/m -j LOG
+
+iptables -P INPUT DROP 
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s8 -o enp0s9 -d 192.168.2.3 --dport 443 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s9 -o enp0s8 -s 192.168.2.3 --sport 443 -m state --state ESTABLISHED
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s9 -o enp0s10 -s 192.168.2.3 -d 192.168.3.4 --dport 8080 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s10 -o enp0s9 -s 192.168.3.4 --sport 8080 -d 192.168.2.3 -m state --state ESTABLISHED
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s9 -o enp0s10 -s 192.168.2.3 -d 192.168.3.5 --dport 3306 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s10 -o enp0s9 -s 192.168.3.5 --sport 3306 -d 192.168.2.3 -m state --state ESTABLISHED
+
+iptables -A INPUT -j ACCEPT -p tcp  -i enp0s8 --dport 22 -m state --state NEW,ESTABLISHED
+iptables -A OUTPUT -j ACCEPT -p tcp -o enp0s8 --sport 22 -m state --state ESTABLISHED
+
+iptables -A INPUT -j ACCEPT -p tcp  -i enp0s10 -s 192.168.3.6 --dport 22 -m state --state NEW,ESTABLISHED
+iptables -A OUTPUT -j ACCEPT -p tcp -o enp0s10 -d 192.168.3.6 --sport 22 -m state --state ESTABLISHED
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s8 -o enp0s9 -d 192.168.2.3 --dport 22 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -o enp0s8 -i enp0s9 -s 192.168.2.3 --sport 22 -m state --state ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s10 -o enp0s9 -s 192.168.3.6 -d 192.168.2.3 --dport 22 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -o enp0s10 -i enp0s9 -d 192.168.3.6 -s 192.168.2.3 --sport 22 -m state --state ESTABLISHED
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s8 -o enp0s10 -d 192.168.3.4 --dport 22 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -o enp0s8 -i enp0s10 -s 192.168.3.4 --sport 22 -m state --state ESTABLISHED
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s8 -o enp0s10 -s 192.168.1.11 -d 192.168.3.4 --dport 8080 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -o enp0s8 -i enp0s10 -d 192.168.1.11 -s 192.168.3.4 --sport 8080 -m state --state ESTABLISHED
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s8 -o enp0s10 -d 192.168.3.5 --dport 22 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -o enp0s8 -i enp0s10 -s 192.168.3.5 --sport 22 -m state --state ESTABLISHED
+
+iptables -A FORWARD -j ACCEPT -p tcp -i enp0s8 -o enp0s10 -d 192.168.3.6 --dport 22 -m state --state NEW,ESTABLISHED
+iptables -A FORWARD -j ACCEPT -p tcp -o enp0s8 -i enp0s10 -s 192.168.3.6 --sport 22 -m state --state ESTABLISHED

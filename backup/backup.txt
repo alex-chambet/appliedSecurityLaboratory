@@ -1,0 +1,40 @@
+#!/bin/sh
+current_date=`date +%F_%T`
+mkdir -p /home/ca_backup/Desktop/backups/backup_${current_date}/webserver
+mkdir -p /home/ca_backup/Desktop/backups/backup_${current_date}/firewall
+mkdir -p /home/ca_backup/Desktop/backups/backup_${current_date}/ca_core
+mkdir -p /home/ca_backup/Desktop/backups/backup_${current_date}/database
+
+rsync -avR -e "ssh -i /home/ca_backup/.ssh/id_rsa" webserver@webserver:\
+{\
+/var/log/apache2/,\
+/var/www/html/var/log/,\
+/etc/apache2/sites-available/default-ssl.conf\
+} \
+/home/ca_backup/Desktop/backups/backup_${current_date}/webserver
+
+rsync -avR -e "ssh -i /home/ca_backup/.ssh/id_rsa" firewall@firewall:\
+/var/log/kern.log \
+/home/ca_backup/Desktop/backups/backup_${current_date}/firewall
+
+rsync -avR -e "ssh -i /home/ca_backup/.ssh/id_rsa" ca_core@ca_core:\
+{\
+/home/ca_core/Desktop/cacore/appseclab/certsWithKeys,\
+/home/ca_core/Desktop/cacore/appseclab/cacore.log,\
+/home/ca_core/Desktop/cacore/appseclab/activeCert,\
+/home/ca_core/Desktop/cacore/appseclab/revokedCert,\
+/home/ca_core/Desktop/cacore/appseclab/revokedlist.crl\
+} \
+/home/ca_backup/Desktop/backups/backup_${current_date}/ca_core
+
+ssh database@database 'mysqldump imovies > /home/database/dump.sql'
+rsync -avR -e "ssh -i /home/ca_backup/.ssh/id_rsa" database@database:\
+/home/database/dump.sql \
+/home/ca_backup/Desktop/backups/backup_${current_date}/database
+ssh database@database 'rm /home/database/dump.sql'
+
+cd /home/ca_backup/Desktop/backups
+tar -czf /home/ca_backup/Desktop/backups/backup_${current_date}.tar.gz backup_${current_date}
+rm -r /home/ca_backup/Desktop/backups/backup_${current_date}
+gpg -e -r admin@imovies.com /home/ca_backup/Desktop/backups/backup_${current_date}.tar.gz
+rm /home/ca_backup/Desktop/backups/backup_${current_date}.tar.gz
