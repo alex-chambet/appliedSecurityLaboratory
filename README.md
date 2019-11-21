@@ -10,4 +10,4 @@ The Client VM has access to a password manager that contains all the useful pass
 
 ### Warning
 - In order to avoid certificate problem, make sure that all VM have the same time.
-- The default keyboard used at login is en_US
+- The default keyboard used at login is en_US, you can then change it in the VM using for example `setxkbmap ch de` to set the keyboard layout as swiss german
