@@ -1,4 +1,4 @@
-# AppSecLab
+# Applied Security Laboratory - Group 2
 Repository for the Applied Security Lab project at ETHZ
 
 ## VM passwords
