@@ -9,4 +9,5 @@ The Client VM has access to a password manager that contains all the useful pass
 `$sudo keppassxc` in a terminal and use the `/home/client/Desktop/passwords/passwords.kdbx` database with `asl` as master key.
 
 ### Warning
-In order to avoid certificate problem, make sure that all VM have the same time.
+- In order to avoid certificate problem, make sure that all VM have the same time.
+- The default keyboard used at login is en_US
